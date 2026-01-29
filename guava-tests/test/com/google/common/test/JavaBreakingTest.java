@@ -1,30 +1,28 @@
 package com.example;
 
-import sun.misc.BASE64Encoder;
-import sun.misc.BASE64Decoder;
+import java.util.Base64;
 
 /**
- * This class uses internal sun.misc APIs that were available in Java 8
- * but are encapsulated/removed in Java 11 due to the module system (JPMS).
+ * This class now uses the standard java.util.Base64 API that is available
+ * in Java 8+ and is the recommended approach for Base64 encoding/decoding.
  * 
- * Java 8: Compiles and runs fine
- * Java 11: Fails with "package sun.misc does not exist"
+ * Migrated from deprecated sun.misc APIs to java.util.Base64
  */
-public class LegacyBase64Handler {
+class JavaBreakingTest {
     
-    private final BASE64Encoder encoder = new BASE64Encoder();
-    private final BASE64Decoder decoder = new BASE64Decoder();
+    private final Base64.Encoder encoder = Base64.getEncoder();
+    private final Base64.Decoder decoder = Base64.getDecoder();
     
     public String encode(byte[] data) {
-        return encoder.encode(data);
+        return encoder.encodeToString(data);
     }
     
     public byte[] decode(String data) throws Exception {
-        return decoder.decodeBuffer(data);
+        return decoder.decode(data);
     }
     
     public static void main(String[] args) throws Exception {
-        LegacyBase64Handler handler = new LegacyBase64Handler();
+        JavaBreakingTest handler = new JavaBreakingTest();
         
         String original = "Hello, Java 8!";
         String encoded = handler.encode(original.getBytes());
