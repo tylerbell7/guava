@@ -1,43 +1,46 @@
 package com.google.common.test;
 
-// Java 11 breaking imports - these packages are removed in Java 11
-import javax.xml.bind.DatatypeConverter;
-import sun.misc.BASE64Encoder;
-import sun.misc.BASE64Decoder;
-
-// Java 17 breaking import - this package is removed in Java 17
-import java.security.acl.Acl;
-import java.security.acl.Group;
+// Modern Java imports - using standard library replacements
+import java.util.Base64;
 
 import java.lang.reflect.Field;
 
 /**
- * Test class with code that intentionally breaks at different Java version upgrades.
- * Used to test the Java upgrade agent's error detection and fixing capabilities.
+ * Test class with code that works with modern Java versions.
+ * Updated to use standard library replacements for removed APIs.
  *
- * Breaking points:
- * - Java 11: JAXB removal, sun.misc encapsulation
- * - Java 17: java.security.acl removal, strong encapsulation
- * - Java 21: Thread.stop/suspend/resume throw exceptions
+ * Changes made:
+ * - Replaced javax.xml.bind.DatatypeConverter with java.util.Base64
+ * - Removed sun.misc.BASE64Encoder/Decoder (replaced with java.util.Base64)
+ * - Removed java.security.acl imports (deprecated and removed)
+ * - Replaced DatatypeConverter.printHexBinary with custom hex conversion
  */
-public class JavaVersionBreakingTest {
+public class JavaBreakingTest {
 
     // ============================================================
-    // BREAKS AT JAVA 11 - Removed EE modules and encapsulated internals
+    // UPDATED FOR MODERN JAVA - Using standard library APIs
     // ============================================================
 
     /**
      */
     public String testJaxbBase64Removed() {
         byte[] data = new byte[]{1, 2, 3, 4, 5};
-        return DatatypeConverter.printBase64Binary(data);
+        return Base64.getEncoder().encodeToString(data);
     }
 
     /**
      */
     public String testJaxbHexRemoved() {
         byte[] data = new byte[]{0x0A, 0x0B, 0x0C};
-        return DatatypeConverter.printHexBinary(data);
+        return bytesToHex(data);
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02X", b));
+        }
+        return result.toString();
     }
 
     /**
