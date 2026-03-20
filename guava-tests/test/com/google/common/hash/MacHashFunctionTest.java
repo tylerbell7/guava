@@ -32,8 +32,6 @@ import javax.crypto.spec.SecretKeySpec;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
-import sun.security.jca.ProviderList;
-import sun.security.jca.Providers;
 
 /**
  * Tests for the MacHashFunction.
@@ -78,19 +76,6 @@ public class MacHashFunctionTest extends TestCase {
         HashFunction hashFunc = cell.getValue();
         assertMacHashing(HashTestUtils.ascii(stringToTest), algorithm, key, hashFunc);
       }
-    }
-  }
-
-  @AndroidIncompatible // sun.security
-  public void testNoProviders() {
-    ProviderList providers = Providers.getProviderList();
-    Providers.setProviderList(ProviderList.newList());
-    try {
-      Hashing.hmacMd5(MD5_KEY);
-      fail("expected ISE");
-    } catch (IllegalStateException expected) {
-    } finally {
-      Providers.setProviderList(providers);
     }
   }
 

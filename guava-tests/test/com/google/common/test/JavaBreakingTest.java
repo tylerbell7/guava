@@ -1,34 +1,32 @@
 package com.example;
 
-import sun.misc.BASE64Encoder;
-import sun.misc.BASE64Decoder;
-import java.rmi.activation.Activatable;
-import java.rmi.activation.ActivationID;
+import java.util.Base64;
 import java.rmi.MarshalledObject;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * This class demonstrates breaking changes across Java versions:
  * 
  * 
  */
-public class JavaBreakingTest extends Activatable {
+public class JavaBreakingTest extends UnicastRemoteObject {
     
-    // === BREAKS JAVA 8 → 11: sun.misc APIs removed ===
-    private final BASE64Encoder encoder = new BASE64Encoder();
-    private final BASE64Decoder decoder = new BASE64Decoder();
+    // === UPDATED FOR JAVA 11+: Using java.util.Base64 instead of sun.misc ===
+    private final Base64.Encoder encoder = Base64.getEncoder();
+    private final Base64.Decoder decoder = Base64.getDecoder();
     
     public String encodeData(byte[] data) {
-        return encoder.encode(data);
+        return encoder.encodeToString(data);
     }
     
     public byte[] decodeData(String data) throws Exception {
-        return decoder.decodeBuffer(data);
+        return decoder.decode(data);
     }
     
-    public JavaBreakingTest(ActivationID id, MarshalledObject<?> data) 
+    public JavaBreakingTest() 
             throws RemoteException {
-        super(id, 0);
+        super();
     }
     
     @SuppressWarnings("deprecation")

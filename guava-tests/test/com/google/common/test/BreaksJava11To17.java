@@ -1,31 +1,28 @@
 package com.example;
 
-import java.rmi.activation.Activatable;
-import java.rmi.activation.ActivationID;
 import java.rmi.MarshalledObject;
 import java.rmi.RemoteException;
 
 /**
- * This class uses the RMI Activation API which was:
+ * This class previously used the RMI Activation API which was:
  * - Deprecated for removal in Java 15 (JEP 385)
  * - Removed in Java 17 (JEP 407)
  * 
- * Java 11: Compiles successfully
- * Java 17: Fails with "package java.rmi.activation does not exist"
+ * Updated to compile with Java 17+ by removing RMI Activation dependencies
  */
-public class BreaksJava11To17 extends Activatable {
+public class BreaksJava11To17 {
     
-    public BreaksJava11To17(ActivationID id, MarshalledObject<?> data) 
+    public BreaksJava11To17(Object id, MarshalledObject<?> data) 
             throws RemoteException {
-        super(id, 0);
+        // RMI Activation removed - constructor simplified
     }
     
     public String getStatus() {
-        return "RMI Activation is available";
+        return "RMI Activation was removed in Java 17";
     }
     
     public static void main(String[] args) {
-        System.out.println("This code compiles on Java 11 but not Java 17");
+        System.out.println("This code now compiles on Java 17");
         System.out.println("The java.rmi.activation package was removed in Java 17");
     }
 }
